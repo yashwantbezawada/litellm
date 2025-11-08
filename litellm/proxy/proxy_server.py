@@ -270,9 +270,7 @@ from litellm.proxy.management_endpoints.customer_endpoints import (
 from litellm.proxy.management_endpoints.internal_user_endpoints import (
     router as internal_user_router,
 )
-from litellm.proxy.management_endpoints.internal_user_endpoints import (
-    user_update,
-)
+from litellm.proxy.management_endpoints.internal_user_endpoints import user_update
 from litellm.proxy.management_endpoints.key_management_endpoints import (
     delete_verification_tokens,
     duration_in_seconds,
@@ -323,9 +321,7 @@ from litellm.proxy.ocr_endpoints.endpoints import router as ocr_router
 from litellm.proxy.openai_files_endpoints.files_endpoints import (
     router as openai_files_router,
 )
-from litellm.proxy.openai_files_endpoints.files_endpoints import (
-    set_files_config,
-)
+from litellm.proxy.openai_files_endpoints.files_endpoints import set_files_config
 from litellm.proxy.pass_through_endpoints.llm_passthrough_endpoints import (
     passthrough_endpoint_router,
 )
@@ -412,9 +408,7 @@ from litellm.types.proxy.management_endpoints.ui_sso import (
     LiteLLM_UpperboundKeyGenerateParams,
 )
 from litellm.types.realtime import RealtimeQueryParams
-from litellm.types.router import (
-    DeploymentTypedDict,
-)
+from litellm.types.router import DeploymentTypedDict
 from litellm.types.router import ModelInfo as RouterModelInfo
 from litellm.types.router import (
     RouterGeneralSettings,
@@ -3595,7 +3589,7 @@ class ProxyConfig:
                 "guardrails from the DB %s", str(guardrails_in_db)
             )
             for guardrail in guardrails_in_db:
-                IN_MEMORY_GUARDRAIL_HANDLER.initialize_guardrail(
+                IN_MEMORY_GUARDRAIL_HANDLER.sync_guardrail_from_db(
                     guardrail=cast(Guardrail, guardrail),
                 )
         except Exception as e:
@@ -4209,7 +4203,7 @@ class ProxyStartupEvent:
         # Key fixes:
         # 1. Remove/minimize jitter to avoid normalize() memory explosion
         # 2. Use larger misfire_grace_time to prevent backlog calculations
-        # 3. Set replace_existing=True to avoid duplicate jobs (must be passed per-job, not as default)
+        # 3. Set replace_existing=True to avoid duplicate jobs
         from apscheduler.executors.asyncio import AsyncIOExecutor
         from apscheduler.jobstores.memory import MemoryJobStore
 
@@ -5402,7 +5396,7 @@ async def audio_transcriptions(
             data = await proxy_logging_obj.pre_call_hook(
                 user_api_key_dict=user_api_key_dict,
                 data=data,
-                call_type="audio_transcription",
+                call_type="transcription",
             )
 
             ## ROUTE TO CORRECT ENDPOINT ##

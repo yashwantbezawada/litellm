@@ -4952,8 +4952,14 @@ def _get_model_info_helper(  # noqa: PLR0915
                 cache_creation_input_token_cost=_model_info.get(
                     "cache_creation_input_token_cost", None
                 ),
+                cache_creation_input_token_cost_above_200k_tokens=_model_info.get(
+                    "cache_creation_input_token_cost_above_200k_tokens", None
+                ),
                 cache_read_input_token_cost=_model_info.get(
                     "cache_read_input_token_cost", None
+                ),
+                cache_read_input_token_cost_above_200k_tokens=_model_info.get(
+                    "cache_read_input_token_cost_above_200k_tokens", None
                 ),
                 cache_read_input_token_cost_flex=_model_info.get(
                     "cache_read_input_token_cost_flex", None
@@ -7288,6 +7294,8 @@ class ProviderConfigManager:
             return litellm.InfinityRerankConfig()
         elif litellm.LlmProviders.JINA_AI == provider:
             return litellm.JinaAIRerankConfig()
+        elif litellm.LlmProviders.HOSTED_VLLM == provider:
+            return litellm.HostedVLLMRerankConfig()
         elif litellm.LlmProviders.HUGGINGFACE == provider:
             return litellm.HuggingFaceRerankConfig()
         elif litellm.LlmProviders.DEEPINFRA == provider:
@@ -7366,10 +7374,10 @@ class ProviderConfigManager:
                 return litellm.AzureOpenAIOSeriesResponsesAPIConfig()
             else:
                 return litellm.AzureOpenAIResponsesAPIConfig()
-        elif litellm.LlmProviders.LITELLM_PROXY == provider:
-            return litellm.LiteLLMProxyResponsesAPIConfig()
         elif litellm.LlmProviders.XAI == provider:
             return litellm.XAIResponsesAPIConfig()
+        elif litellm.LlmProviders.LITELLM_PROXY == provider:
+            return litellm.LiteLLMProxyResponsesAPIConfig()
         return None
 
     @staticmethod
